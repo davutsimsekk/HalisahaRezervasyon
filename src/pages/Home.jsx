@@ -264,11 +264,11 @@ export default function Home() {
                 </Box>
                 <Grid container spacing={3}>
                     {topPlayers.map((player, i) => (
-                        <Grid size={{ xs: 12, sm: 6, md: 2.4 }} key={player.id}>
+                        <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={player.id}>
                             <Card
                                 component={Link}
                                 to={`/player/${player.id}`}
-                                sx={{ textDecoration: 'none', textAlign: 'center', py: 3, px: 2 }}
+                                sx={{ textDecoration: 'none', textAlign: 'center', py: 3, px: 2, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                             >
                                 <Box sx={{ position: 'relative', display: 'inline-block', mb: 2 }}>
                                     <Avatar
@@ -288,10 +288,10 @@ export default function Home() {
                                         />
                                     )}
                                 </Box>
-                                <Typography variant="subtitle1" fontWeight={700} noWrap>{player.name}</Typography>
+                                <Typography variant="subtitle1" fontWeight={700} noWrap sx={{ maxWidth: '100%' }}>{player.name}</Typography>
                                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{player.position}</Typography>
-                                <Typography variant="h5" fontWeight={800} color="primary.main">{player.rating}</Typography>
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography variant="h6" fontWeight={800} color="primary.main">{player.rating.toFixed(1)}</Typography>
+                                <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: '100%' }}>
                                     {player.goals} gol • {player.assists} asist
                                 </Typography>
                             </Card>
