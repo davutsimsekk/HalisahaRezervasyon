@@ -3,11 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import {
     Box, Container, Typography, Grid, Card, CardContent, Chip, Stack,
     Button, Avatar, Divider, Dialog, DialogTitle, DialogContent, DialogActions,
-<<<<<<< HEAD
     TextField, Snackbar, Alert, IconButton, Select, MenuItem, InputLabel, FormControl,
-=======
-    TextField, Snackbar, Alert, IconButton,
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import StarIcon from '@mui/icons-material/Star';
@@ -20,17 +16,11 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import AirIcon from '@mui/icons-material/Air';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
-<<<<<<< HEAD
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { fields } from '../data/fields';
 import { reservations } from '../data/reservations';
 import { getWeather, getWeekForecast } from '../data/weather';
 import { rentalProducts, fieldInventory } from '../data/rentals';
-=======
-import { fields } from '../data/fields';
-import { reservations } from '../data/reservations';
-import { getWeather, getWeekForecast } from '../data/weather';
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 
 export default function FieldDetail() {
     const { id } = useParams();
@@ -39,12 +29,9 @@ export default function FieldDetail() {
     const [bookingDialog, setBookingDialog] = useState(false);
     const [selectedHour, setSelectedHour] = useState(null);
     const [snackbar, setSnackbar] = useState(false);
-<<<<<<< HEAD
     const [rentalModal, setRentalModal] = useState(false);
     const [selectedRental, setSelectedRental] = useState(null);
     const [rentalForm, setRentalForm] = useState({ date: '', time: '18:00', duration: 2 });
-=======
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 
     const weather = useMemo(() => field ? getWeather(field.city, selectedDate) : null, [field, selectedDate]);
     const forecast = useMemo(() => field ? getWeekForecast(field.city) : [], [field]);
@@ -80,7 +67,6 @@ export default function FieldDetail() {
         setSelectedHour(null);
     };
 
-<<<<<<< HEAD
     const fieldProducts = (fieldInventory[field?.id] ? Object.entries(fieldInventory[field.id]).map(([pid, stock]) => {
         const product = rentalProducts.find((p) => p.id === Number(pid));
         return product ? { ...product, stock } : null;
@@ -90,8 +76,6 @@ export default function FieldDetail() {
         ? (rentalForm.duration === 'day' ? selectedRental.pricePerDay : selectedRental.pricePerHour * Number(rentalForm.duration))
         : 0;
 
-=======
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
     return (
         <Box sx={{ minHeight: '100vh', pb: 8 }}>
             {/* Hero Image */}
@@ -262,7 +246,6 @@ export default function FieldDetail() {
                                 })}
                             </Grid>
                         </Card>
-<<<<<<< HEAD
                         {/* Ekipman Kiralama */}
                         {fieldProducts.length > 0 && (
                             <Card sx={{ p: 3, mt: 3 }}>
@@ -331,8 +314,6 @@ export default function FieldDetail() {
                                 </Grid>
                             </Card>
                         )}
-=======
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
                     </Grid>
 
                     {/* Right: Weather + Info Card */}
@@ -454,7 +435,6 @@ export default function FieldDetail() {
                 </DialogActions>
             </Dialog>
 
-<<<<<<< HEAD
             {/* Ekipman Kiralama Modal */}
             <Dialog open={rentalModal} onClose={() => { setRentalModal(false); setSelectedRental(null); }} maxWidth="xs" fullWidth
                 PaperProps={{ sx: { bgcolor: '#111827', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3 } }}>
@@ -514,8 +494,6 @@ export default function FieldDetail() {
                 </DialogActions>
             </Dialog>
 
-=======
->>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
             {/* Snackbar */}
             <Snackbar open={snackbar} autoHideDuration={4000} onClose={() => setSnackbar(false)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

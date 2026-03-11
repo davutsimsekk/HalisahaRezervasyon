@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"\nAdd-Type -AssemblyName System.Windows.Forms\nAdd-Type -AssemblyName System.Drawing\nStart-Sleep -Milliseconds 500\n\\\\$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds\n\\\\$bitmap = New-Object System.Drawing.Bitmap\\(\\\\$screen.Width, \\\\$screen.Height\\)\n\\\\$graphics = [System.Drawing.Graphics]::FromImage\\(\\\\$bitmap\\)\n\\\\$graphics.CopyFromScreen\\(\\\\$screen.Location, [System.Drawing.Point]::Empty, \\\\$screen.Size\\)\n\\\\$bitmap.Save\\('C:\\\\Users\\\\Davut\\\\AppData\\\\Local\\\\Temp\\\\screenshot.png'\\)\n\\\\$graphics.Dispose\\(\\)\n\\\\$bitmap.Dispose\\(\\)\nWrite-Host 'Screenshot saved'\n\")",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_screenshot"
+    ]
+  }
+}
