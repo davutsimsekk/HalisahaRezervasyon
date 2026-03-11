@@ -14,8 +14,11 @@ import PeopleIcon from '@mui/icons-material/People';
 import ForumIcon from '@mui/icons-material/Forum';
 import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
+<<<<<<< HEAD
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+=======
+>>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 import { currentUser } from '../data/players';
 
 const navItems = [
@@ -25,8 +28,11 @@ const navItems = [
     { label: 'Takımlar', path: '/teams', icon: <GroupsIcon /> },
     { label: 'Oyuncular', path: '/players', icon: <PeopleIcon /> },
     { label: 'İlanlar', path: '/requests', icon: <ForumIcon /> },
+<<<<<<< HEAD
     { label: 'Kiralama', path: '/rental', icon: <StorefrontIcon /> },
     { label: 'Kontrol Merkezi', path: '/owner-dashboard', icon: <DashboardIcon /> },
+=======
+>>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 ];
 
 export default function Navbar() {

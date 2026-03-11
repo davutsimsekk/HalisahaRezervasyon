@@ -13,8 +13,11 @@ import Players from './pages/Players'
 import PlayerProfile from './pages/PlayerProfile'
 import Requests from './pages/Requests'
 import Login from './pages/Login'
+<<<<<<< HEAD
 import OwnerDashboard from './pages/OwnerDashboard'
 import RentalStore from './pages/RentalStore'
+=======
+>>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
 
 function App() {
   return (
@@ -33,8 +36,11 @@ function App() {
           <Route path="/player/:id" element={<PlayerProfile />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/login" element={<Login />} />
+<<<<<<< HEAD
           <Route path="/owner-dashboard" element={<OwnerDashboard />} />
           <Route path="/rental" element={<RentalStore />} />
+=======
+>>>>>>> 0e3a58f3d1399030d223af36f916e784cdcb5005
         </Routes>
       </Box>
       <Footer />
