@@ -1,0 +1,188 @@
+export const CATEGORIES = [
+    { key: 'all',     label: 'Tümü',          color: '#448AFF' },
+    { key: 'top',     label: '⚽ Toplar',      color: '#00E676' },
+    { key: 'krampon', label: '👟 Krampon',     color: '#FF9800' },
+    { key: 'eldiven', label: '🧤 Eldiven',     color: '#CE93D8' },
+    { key: 'yelek',   label: '🦺 Yelek & Forma', color: '#FFD600' },
+    { key: 'diger',   label: '⚙️ Diğer',      color: '#448AFF' },
+];
+
+export const rentalProducts = [
+    // ── Toplar ──────────────────────────────────────────────────────────
+    {
+        id: 1,
+        name: 'Profesyonel Maç Topu',
+        category: 'top', emoji: '⚽',
+        brand: 'Nike Flight', spec: 'No:5',
+        pricePerHour: 30, pricePerDay: 100,
+        stock: 6, totalStock: 8,
+        rating: 4.9,
+        desc: 'FIFA onaylı profesyonel maç topu, yüksek hava tutma kapasitesi',
+    },
+    {
+        id: 2,
+        name: 'Antrenman Topu',
+        category: 'top', emoji: '⚽',
+        brand: 'Adidas Tiro', spec: 'No:5',
+        pricePerHour: 15, pricePerDay: 50,
+        stock: 10, totalStock: 12,
+        rating: 4.5,
+        desc: 'Günlük antrenman ve ısınma için dayanıklı top',
+    },
+    {
+        id: 3,
+        name: 'Futsal Topu',
+        category: 'top', emoji: '⚽',
+        brand: 'Select Futsal', spec: 'No:4',
+        pricePerHour: 20, pricePerDay: 70,
+        stock: 4, totalStock: 6,
+        rating: 4.7,
+        desc: 'Sert zemin için düşük sıçramalı futsal topu',
+    },
+
+    // ── Krampon ─────────────────────────────────────────────────────────
+    {
+        id: 4,
+        name: 'Halı Saha Krampon',
+        category: 'krampon', emoji: '👟',
+        brand: 'Nike Mercurial', spec: '38–45',
+        pricePerHour: 40, pricePerDay: 140,
+        stock: 5, totalStock: 10,
+        rating: 4.8,
+        desc: 'Yapay çim zeminlerde maksimum hız ve kontrol',
+    },
+    {
+        id: 5,
+        name: 'Halı Saha Ayakkabısı',
+        category: 'krampon', emoji: '👟',
+        brand: 'Adidas Predator', spec: '38–45',
+        pricePerHour: 35, pricePerDay: 120,
+        stock: 8, totalStock: 10,
+        rating: 4.6,
+        desc: 'Konforlu taban, halı sahaya özel tutuş sistemi',
+    },
+    {
+        id: 6,
+        name: 'Çocuk Krampon',
+        category: 'krampon', emoji: '👟',
+        brand: 'Nike Jr.', spec: '28–37',
+        pricePerHour: 20, pricePerDay: 70,
+        stock: 0, totalStock: 6,
+        rating: 4.4,
+        desc: '6–13 yaş arası çocuklar için ergonomik halı saha krampon',
+    },
+
+    // ── Eldiven ─────────────────────────────────────────────────────────
+    {
+        id: 7,
+        name: 'Kaleci Eldiveni',
+        category: 'eldiven', emoji: '🧤',
+        brand: 'Adidas Predator', spec: 'S / M / L',
+        pricePerHour: 25, pricePerDay: 85,
+        stock: 4, totalStock: 6,
+        rating: 4.7,
+        desc: 'Profesyonel kalecilik eldiveni, güçlendirilmiş parmak koruması',
+    },
+    {
+        id: 8,
+        name: 'Antrenman Eldiveni',
+        category: 'eldiven', emoji: '🧤',
+        brand: 'Reusch Attrakt', spec: 'S / M / L / XL',
+        pricePerHour: 15, pricePerDay: 50,
+        stock: 6, totalStock: 8,
+        rating: 4.4,
+        desc: 'Antrenmanlar için hafif ve nefes alabilen eldiven',
+    },
+
+    // ── Yelek & Forma ────────────────────────────────────────────────────
+    {
+        id: 9,
+        name: 'Antrenman Yeleği',
+        category: 'yelek', emoji: '🦺',
+        brand: 'Generic', spec: 'Sarı · 10 adet set',
+        pricePerHour: 10, pricePerDay: 35,
+        stock: 18, totalStock: 20,
+        rating: 4.3,
+        desc: 'Takım ayrımı için floresan sarı yelek seti (10 adet)',
+    },
+    {
+        id: 10,
+        name: 'Antrenman Yeleği',
+        category: 'yelek', emoji: '🦺',
+        brand: 'Generic', spec: 'Kırmızı · 10 adet set',
+        pricePerHour: 10, pricePerDay: 35,
+        stock: 14, totalStock: 20,
+        rating: 4.3,
+        desc: 'Takım ayrımı için kırmızı yelek seti (10 adet)',
+    },
+    {
+        id: 11,
+        name: 'Maç Forması Seti',
+        category: 'yelek', emoji: '👕',
+        brand: 'Nike Park', spec: 'S–XL · 10 adet set',
+        pricePerHour: 60, pricePerDay: 200,
+        stock: 3, totalStock: 5,
+        rating: 4.8,
+        desc: 'Rakam baskılı profesyonel maç forması seti (10 adet)',
+    },
+
+    // ── Diğer ────────────────────────────────────────────────────────────
+    {
+        id: 12,
+        name: 'Teklik (Dizlik)',
+        category: 'diger', emoji: '🦵',
+        brand: 'Adidas', spec: 'S / M / L',
+        pricePerHour: 8, pricePerDay: 28,
+        stock: 16, totalStock: 20,
+        rating: 4.2,
+        desc: 'Darbe emici hafif dizlik, halı saha için ideal',
+    },
+    {
+        id: 13,
+        name: 'Taşınabilir Kale',
+        category: 'diger', emoji: '🥅',
+        brand: 'Stanlord Pro', spec: '3×2 m',
+        pricePerHour: 50, pricePerDay: 175,
+        stock: 4, totalStock: 4,
+        rating: 4.9,
+        desc: 'Katlanabilir, profesyonel ağlı taşınabilir kale',
+    },
+    {
+        id: 14,
+        name: 'Koni Seti',
+        category: 'diger', emoji: '🔺',
+        brand: 'Generic', spec: '20 adet',
+        pricePerHour: 8, pricePerDay: 25,
+        stock: 8, totalStock: 10,
+        rating: 4.4,
+        desc: 'Antrenman konisi seti, çeşitli driblej ve pozisyon çalışmaları için',
+    },
+    {
+        id: 15,
+        name: 'Top Pompası Seti',
+        category: 'diger', emoji: '💨',
+        brand: 'Generic', spec: 'Pompa + 5 iğne',
+        pricePerHour: 5, pricePerDay: 15,
+        stock: 10, totalStock: 12,
+        rating: 4.3,
+        desc: 'Çift hazneli pompa ve yedek iğne seti',
+    },
+];
+
+// fieldId → { productId: stock }  (her sahanın kendi envanteri)
+export const fieldInventory = {
+    1: { 1:4, 2:6, 3:2, 4:3, 5:4, 7:2, 8:3, 9:10, 10:8, 11:2, 12:6, 13:4, 14:5, 15:5 },
+    2: { 1:3, 2:5, 3:1, 4:2, 5:3, 7:1, 8:2, 9:8, 10:6, 11:1, 12:3, 13:3, 14:3, 15:4 },
+    3: { 1:2, 2:4, 4:2, 5:2, 7:1, 8:1, 9:6, 10:5, 12:2, 13:2, 15:3 },
+    4: { 1:2, 2:3, 9:5, 10:4, 12:2, 13:2, 15:2 },
+    5: { 1:3, 2:4, 4:1, 5:1, 9:8, 10:6, 12:3, 13:2, 15:2 },
+    6: { 1:2, 2:3, 9:4, 10:3, 12:1, 15:2 },
+    7: { 1:1, 2:2, 9:4, 10:3, 15:1 },
+    8: { 1:2, 2:3, 9:5, 10:4, 13:2, 15:2 },
+};
+
+export const INITIAL_RENTALS = [
+    { id: 1, product: 'Profesyonel Maç Topu',   emoji: '⚽', date: 'Bugün',  time: '19:00', duration: 2, total: 60,  status: 'active' },
+    { id: 2, product: 'Antrenman Yeleği (Sarı)', emoji: '🦺', date: 'Dün',    time: '20:00', duration: 1, total: 10,  status: 'completed' },
+    { id: 3, product: 'Kaleci Eldiveni',          emoji: '🧤', date: 'Yarın', time: '18:00', duration: 2, total: 50,  status: 'upcoming' },
+];
