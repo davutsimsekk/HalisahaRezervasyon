@@ -21,6 +21,7 @@ import { fields } from '../data/fields';
 import { reservations } from '../data/reservations';
 import { getWeather, getWeekForecast } from '../data/weather';
 import { rentalProducts, fieldInventory } from '../data/rentals';
+import { allPackages, fieldPackages, PACKAGE_CATEGORIES } from '../data/packages';
 
 export default function FieldDetail() {
     const { id } = useParams();
@@ -29,6 +30,7 @@ export default function FieldDetail() {
     const [bookingDialog, setBookingDialog] = useState(false);
     const [selectedHour, setSelectedHour] = useState(null);
     const [snackbar, setSnackbar] = useState(false);
+    const [selectedPackages, setSelectedPackages] = useState([]);
     const [rentalModal, setRentalModal] = useState(false);
     const [selectedRental, setSelectedRental] = useState(null);
     const [rentalForm, setRentalForm] = useState({ date: '', time: '18:00', duration: 2 });
@@ -65,7 +67,18 @@ export default function FieldDetail() {
         setBookingDialog(false);
         setSnackbar(true);
         setSelectedHour(null);
+        setSelectedPackages([]);
     };
+
+    const togglePackage = (id) =>
+        setSelectedPackages((prev) => prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]);
+
+    const availablePackages = (fieldPackages[field?.id] || []).map((pid) => allPackages.find((p) => p.id === pid)).filter(Boolean);
+    const packagesTotal = selectedPackages.reduce((sum, pid) => {
+        const pkg = allPackages.find((p) => p.id === pid);
+        return sum + (pkg?.price || 0);
+    }, 0);
+    const bookingTotal = field ? field.pricePerHour + packagesTotal : 0;
 
     const fieldProducts = (fieldInventory[field?.id] ? Object.entries(fieldInventory[field.id]).map(([pid, stock]) => {
         const product = rentalProducts.find((p) => p.id === Number(pid));
@@ -399,38 +412,116 @@ export default function FieldDetail() {
             </Container>
 
             {/* Booking Dialog */}
-            <Dialog open={bookingDialog} onClose={() => setBookingDialog(false)} maxWidth="sm" fullWidth
-                PaperProps={{ sx: { backgroundColor: 'background.paper', backgroundImage: 'none' } }}
+            <Dialog open={bookingDialog} onClose={() => { setBookingDialog(false); setSelectedPackages([]); }} maxWidth="sm" fullWidth
+                PaperProps={{ sx: { bgcolor: '#111827', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3, backgroundImage: 'none' } }}
             >
-                <DialogTitle sx={{ fontWeight: 700 }}>
-                    Rezervasyon Onayla
-                </DialogTitle>
-                <DialogContent>
-                    <Box sx={{ py: 2 }}>
-                        <Stack spacing={2}>
+                <DialogTitle sx={{ fontWeight: 700, pb: 1 }}>Rezervasyon Onayla</DialogTitle>
+                <DialogContent sx={{ pt: '8px !important' }}>
+                    <Stack spacing={2}>
+                        {/* Özet bilgiler */}
+                        <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+                            {[
+                                { label: 'Saha',  value: field.name },
+                                { label: 'Tarih', value: selectedDate },
+                                { label: 'Saat',  value: `${selectedHour}:00 – ${selectedHour + 1}:00` },
+                            ].map((item) => (
+                                <Box key={item.label} sx={{ flex: 1, minWidth: 120, p: 1.25, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.63rem' }}>{item.label}</Typography>
+                                    <Typography variant="body2" fontWeight={700}>{item.value}</Typography>
+                                </Box>
+                            ))}
+                        </Box>
+
+                        <TextField label="Takım Adı (Opsiyonel)" size="small" fullWidth
+                            sx={{ '& .MuiOutlinedInput-root fieldset': { borderColor: 'rgba(255,255,255,0.12)' } }} />
+                        <TextField label="Notlar" size="small" fullWidth multiline rows={2}
+                            sx={{ '& .MuiOutlinedInput-root fieldset': { borderColor: 'rgba(255,255,255,0.12)' } }} />
+
+                        {/* Paketler */}
+                        {availablePackages.length > 0 && (
                             <Box>
-                                <Typography variant="caption" color="text.secondary">Saha</Typography>
-                                <Typography variant="body1" fontWeight={600}>{field.name}</Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.25 }}>
+                                    <Typography variant="body2" fontWeight={700}>Paket Ekle</Typography>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>
+                                        — opsiyonel, rezervasyona dahil edilir
+                                    </Typography>
+                                </Box>
+                                <Stack spacing={0.75}>
+                                    {availablePackages.map((pkg) => {
+                                        const isSelected = selectedPackages.includes(pkg.id);
+                                        const cat = PACKAGE_CATEGORIES[pkg.category];
+                                        return (
+                                            <Box key={pkg.id} onClick={() => togglePackage(pkg.id)} sx={{
+                                                display: 'flex', alignItems: 'center', gap: 1.5,
+                                                p: 1.25, borderRadius: 2, cursor: 'pointer',
+                                                bgcolor: isSelected ? `${cat.color}10` : 'rgba(255,255,255,0.02)',
+                                                border: `1px solid ${isSelected ? cat.color + '40' : 'rgba(255,255,255,0.06)'}`,
+                                                transition: 'all 0.18s',
+                                                '&:hover': { borderColor: cat.color + '50', bgcolor: `${cat.color}08` },
+                                            }}>
+                                                {/* Checkbox */}
+                                                <Box sx={{
+                                                    width: 20, height: 20, borderRadius: 0.75, flexShrink: 0,
+                                                    border: `2px solid ${isSelected ? cat.color : 'rgba(255,255,255,0.2)'}`,
+                                                    bgcolor: isSelected ? cat.color : 'transparent',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    transition: 'all 0.18s',
+                                                }}>
+                                                    {isSelected && <Box sx={{ width: 5, height: 9, border: '2px solid #000', borderTop: 'none', borderLeft: 'none', transform: 'rotate(45deg) translate(-1px, -1px)' }} />}
+                                                </Box>
+                                                <Box sx={{ fontSize: '1.2rem', flexShrink: 0 }}>{pkg.emoji}</Box>
+                                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                                                        <Typography variant="body2" fontWeight={700} sx={{ fontSize: '0.82rem' }}>{pkg.name}</Typography>
+                                                        {pkg.badge && (
+                                                            <Chip size="small" label={pkg.badge} sx={{
+                                                                height: 16, fontSize: '0.55rem', fontWeight: 700,
+                                                                bgcolor: pkg.badge === 'Ücretsiz' ? 'rgba(0,230,118,0.15)' : pkg.badge === 'Popüler' ? 'rgba(255,152,0,0.15)' : 'rgba(68,138,255,0.15)',
+                                                                color: pkg.badge === 'Ücretsiz' ? '#00E676' : pkg.badge === 'Popüler' ? '#FF9800' : '#448AFF',
+                                                            }} />
+                                                        )}
+                                                        <Chip size="small" label={cat.label} sx={{
+                                                            height: 16, fontSize: '0.55rem', fontWeight: 600,
+                                                            bgcolor: `${cat.color}12`, color: cat.color,
+                                                        }} />
+                                                    </Box>
+                                                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>{pkg.desc}</Typography>
+                                                </Box>
+                                                <Typography variant="body2" fontWeight={800}
+                                                    sx={{ color: pkg.price === 0 ? '#00E676' : 'text.primary', flexShrink: 0 }}>
+                                                    {pkg.price === 0 ? 'Ücretsiz' : `+${pkg.price} ₺`}
+                                                </Typography>
+                                            </Box>
+                                        );
+                                    })}
+                                </Stack>
                             </Box>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">Tarih</Typography>
-                                <Typography variant="body1" fontWeight={600}>{selectedDate}</Typography>
+                        )}
+
+                        {/* Toplam */}
+                        <Box sx={{ p: 1.75, borderRadius: 2, bgcolor: 'rgba(0,230,118,0.05)', border: '1px solid rgba(0,230,118,0.18)' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: packagesTotal > 0 ? 0.75 : 0 }}>
+                                <Typography variant="body2" color="text.secondary">Saha ücreti</Typography>
+                                <Typography variant="body2" fontWeight={600}>{field.pricePerHour} ₺</Typography>
                             </Box>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">Saat</Typography>
-                                <Typography variant="body1" fontWeight={600}>{selectedHour}:00 - {selectedHour + 1}:00</Typography>
+                            {packagesTotal > 0 && (
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Paketler ({selectedPackages.length} adet)
+                                    </Typography>
+                                    <Typography variant="body2" fontWeight={600}>+{packagesTotal} ₺</Typography>
+                                </Box>
+                            )}
+                            {packagesTotal > 0 && <Divider sx={{ borderColor: 'rgba(0,230,118,0.15)', mb: 0.75 }} />}
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="body1" fontWeight={700}>Toplam</Typography>
+                                <Typography variant="h5" fontWeight={800} color="primary.main">{bookingTotal} ₺</Typography>
                             </Box>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">Ücret</Typography>
-                                <Typography variant="h5" fontWeight={800} color="primary.main">{field.pricePerHour} ₺</Typography>
-                            </Box>
-                            <TextField label="Takım Adı (Opsiyonel)" size="small" fullWidth />
-                            <TextField label="Notlar" size="small" fullWidth multiline rows={2} />
-                        </Stack>
-                    </Box>
+                        </Box>
+                    </Stack>
                 </DialogContent>
-                <DialogActions sx={{ px: 3, pb: 3 }}>
-                    <Button onClick={() => setBookingDialog(false)} color="inherit">İptal</Button>
+                <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
+                    <Button onClick={() => { setBookingDialog(false); setSelectedPackages([]); }} color="inherit">İptal</Button>
                     <Button variant="contained" onClick={handleBook}>Rezervasyonu Onayla</Button>
                 </DialogActions>
             </Dialog>
