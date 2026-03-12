@@ -5,8 +5,10 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
     Paper, Stack, Divider, Button, Dialog, DialogTitle,
     DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel,
-    FormControl,
+    FormControl, Tabs, Tab,
 } from '@mui/material';
+import RefereePanel from './RefereePanel';
+import { useRole } from '../context/RoleContext';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -158,6 +160,8 @@ const HeatCell = ({ value, selected, onClick }) => (
 
 // ─── Ana sayfa ────────────────────────────────────────────────────────────────
 export default function OwnerDashboard() {
+    const { currentRole } = useRole();
+    const [activeTab, setActiveTab] = useState(currentRole === 'referee' ? 1 : 0);
     const [period, setPeriod] = useState('weekly');
     const [rules, setRules] = useState(INITIAL_RULES);
     const [campaigns, setCampaigns] = useState(INITIAL_CAMPAIGNS);
@@ -256,6 +260,37 @@ export default function OwnerDashboard() {
                         sx={{ bgcolor: 'rgba(0,230,118,0.08)', color: '#00E676', fontWeight: 700, border: '1px solid rgba(0,230,118,0.2)' }}
                     />
                 </Box>
+
+                {/* ── Rol Tabları ── */}
+                <Box sx={{ mb: 3, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Tabs
+                        value={activeTab}
+                        onChange={(_, v) => setActiveTab(v)}
+                        sx={{
+                            '& .MuiTabs-indicator': { bgcolor: activeTab === 0 ? '#00E676' : '#FFD600' },
+                            minHeight: 44,
+                        }}
+                    >
+                        <Tab
+                            label="🏟️ Saha İşletmecisi"
+                            sx={{
+                                fontWeight: 700, fontSize: '0.9rem', minHeight: 44, textTransform: 'none',
+                                color: 'text.secondary', '&.Mui-selected': { color: '#00E676' },
+                            }}
+                        />
+                        <Tab
+                            label="🟨 Hakem Paneli"
+                            sx={{
+                                fontWeight: 700, fontSize: '0.9rem', minHeight: 44, textTransform: 'none',
+                                color: 'text.secondary', '&.Mui-selected': { color: '#FFD600' },
+                            }}
+                        />
+                    </Tabs>
+                </Box>
+
+                {activeTab === 1 && <RefereePanel />}
+
+                {activeTab === 0 && (<>
 
                 {/* ── Özet Kartlar ── */}
                 <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -917,6 +952,7 @@ export default function OwnerDashboard() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            </>)}
         </Box>
     );
 }

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
     AppBar, Toolbar, Typography, Button, IconButton, Box, Drawer,
     List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar,
-    useMediaQuery, useTheme, Container,
+    useMediaQuery, useTheme, Container, Chip, Menu, MenuItem,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -16,7 +16,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { currentUser } from '../data/players';
+import { useRole, ROLES } from '../context/RoleContext';
 
 const navItems = [
     { label: 'Ana Sayfa', path: '/', icon: <HomeIcon /> },
@@ -31,9 +33,12 @@ const navItems = [
 
 export default function Navbar() {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [roleMenuAnchor, setRoleMenuAnchor] = useState(null);
     const location = useLocation();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const { currentRole, setCurrentRole } = useRole();
+    const roleInfo = ROLES.find((r) => r.id === currentRole);
 
     return (
         <>
@@ -95,6 +100,52 @@ export default function Navbar() {
                         )}
 
                         <Box sx={{ flexGrow: isMobile ? 1 : 0 }} />
+
+                        {/* Rol Seçici */}
+                        <Chip
+                            label={`${roleInfo.emoji} ${isMobile ? '' : roleInfo.label}`}
+                            onClick={(e) => setRoleMenuAnchor(e.currentTarget)}
+                            onDelete={(e) => setRoleMenuAnchor(e.currentTarget)}
+                            deleteIcon={<KeyboardArrowDownIcon sx={{ fontSize: '16px !important' }} />}
+                            size="small"
+                            sx={{
+                                bgcolor: roleInfo.bg,
+                                color: roleInfo.color,
+                                fontWeight: 700,
+                                border: `1px solid ${roleInfo.color}40`,
+                                cursor: 'pointer',
+                                fontSize: '0.75rem',
+                                mr: 1,
+                                '&:hover': { opacity: 0.85 },
+                                '& .MuiChip-deleteIcon': { color: roleInfo.color },
+                            }}
+                        />
+                        <Menu
+                            anchorEl={roleMenuAnchor}
+                            open={Boolean(roleMenuAnchor)}
+                            onClose={() => setRoleMenuAnchor(null)}
+                            PaperProps={{
+                                sx: { bgcolor: '#111827', border: '1px solid rgba(255,255,255,0.1)', minWidth: 180 },
+                            }}
+                        >
+                            {ROLES.map((role) => (
+                                <MenuItem
+                                    key={role.id}
+                                    selected={currentRole === role.id}
+                                    onClick={() => { setCurrentRole(role.id); setRoleMenuAnchor(null); }}
+                                    sx={{
+                                        color: currentRole === role.id ? role.color : 'text.secondary',
+                                        fontWeight: currentRole === role.id ? 700 : 500,
+                                        gap: 1.5,
+                                        '&.Mui-selected': { bgcolor: role.bg },
+                                        '&:hover': { bgcolor: role.bg },
+                                    }}
+                                >
+                                    <span>{role.emoji}</span>
+                                    {role.label}
+                                </MenuItem>
+                            ))}
+                        </Menu>
 
                         {/* User Avatar */}
                         <Button

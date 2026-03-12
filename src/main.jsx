@@ -5,13 +5,19 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from './theme'
 import './index.css'
 import App from './App.jsx'
+import { RoleProvider } from './context/RoleContext'
+import { TeamProvider } from './context/TeamContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <RoleProvider>
+          <TeamProvider>
+            <App />
+          </TeamProvider>
+        </RoleProvider>
       </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,

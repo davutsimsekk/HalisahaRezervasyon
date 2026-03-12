@@ -12,17 +12,17 @@ export const tournaments = [
         teamIds: [1, 2, 3, 4, 5, 6, 7, 8],
         bracket: {
             quarterFinals: [
-                { id: 'qf1', team1Id: 1, team2Id: 8, score1: 4, score2: 1, winnerId: 1, played: true },
-                { id: 'qf2', team1Id: 2, team2Id: 7, score1: 3, score2: 2, winnerId: 2, played: true },
-                { id: 'qf3', team1Id: 3, team2Id: 6, score1: 2, score2: 2, winnerId: 3, played: true, penalty: '4-3' },
-                { id: 'qf4', team1Id: 4, team2Id: 5, score1: 5, score2: 3, winnerId: 4, played: true },
+                { id: 'qf1', team1Id: 1, team2Id: 8, score1: 4, score2: 1, winnerId: 1, played: true, refereeId: 1 },
+                { id: 'qf2', team1Id: 2, team2Id: 7, score1: 3, score2: 2, winnerId: 2, played: true, refereeId: 1 },
+                { id: 'qf3', team1Id: 3, team2Id: 6, score1: 2, score2: 2, winnerId: 3, played: true, penalty: '4-3', refereeId: 2 },
+                { id: 'qf4', team1Id: 4, team2Id: 5, score1: 5, score2: 3, winnerId: 4, played: true, refereeId: 2 },
             ],
             semiFinals: [
-                { id: 'sf1', team1Id: 1, team2Id: 2, score1: 3, score2: 1, winnerId: 1, played: true },
-                { id: 'sf2', team1Id: 3, team2Id: 4, score1: null, score2: null, winnerId: null, played: false },
+                { id: 'sf1', team1Id: 1, team2Id: 2, score1: 3, score2: 1, winnerId: 1, played: true, refereeId: 1 },
+                { id: 'sf2', team1Id: 3, team2Id: 4, score1: null, score2: null, winnerId: null, played: false, refereeId: 1 },
             ],
             final: {
-                id: 'f1', team1Id: null, team2Id: null, score1: null, score2: null, winnerId: null, played: false,
+                id: 'f1', team1Id: null, team2Id: null, score1: null, score2: null, winnerId: null, played: false, refereeId: 1,
             },
         },
         topScorers: [
@@ -44,11 +44,11 @@ export const tournaments = [
         teamIds: [1, 2, 3, 4],
         bracket: {
             semiFinals: [
-                { id: 'sf1', team1Id: 1, team2Id: 4, score1: 3, score2: 2, winnerId: 1, played: true },
-                { id: 'sf2', team1Id: 2, team2Id: 3, score1: 1, score2: 4, winnerId: 3, played: true },
+                { id: 'sf1', team1Id: 1, team2Id: 4, score1: 3, score2: 2, winnerId: 1, played: true, refereeId: 2 },
+                { id: 'sf2', team1Id: 2, team2Id: 3, score1: 1, score2: 4, winnerId: 3, played: true, refereeId: 2 },
             ],
             final: {
-                id: 'f1', team1Id: 1, team2Id: 3, score1: 2, score2: 1, winnerId: 1, played: true,
+                id: 'f1', team1Id: 1, team2Id: 3, score1: 2, score2: 1, winnerId: 1, played: true, refereeId: 2,
             },
         },
         topScorers: [

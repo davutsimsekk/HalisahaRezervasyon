@@ -1,7 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import {
     Box, Container, Typography, Grid, Card, CardContent, Chip, Stack,
-    Avatar, Divider, IconButton, LinearProgress,
+    Avatar, Divider, IconButton, LinearProgress, Table, TableBody,
+    TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -9,8 +10,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import GavelIcon from '@mui/icons-material/Gavel';
 import { players } from '../data/players';
 import { teams } from '../data/teams';
+import { initialMatchRatings } from '../data/matchRatings';
+import { referees } from '../data/referees';
+import { tournaments } from '../data/tournaments';
 
 const positionColors = {
     'Forvet': '#FF5252',
@@ -54,6 +59,32 @@ export default function PlayerProfile() {
     const team = teams.find((t) => t.id === player.teamId);
     const totalGames = player.wins + player.losses + player.draws;
     const winRate = totalGames > 0 ? ((player.wins / totalGames) * 100).toFixed(0) : 0;
+
+    // Hakem değerlendirmeleri: bu oyuncuya ait tüm rating'ler
+    const playerRatingEntries = initialMatchRatings.flatMap((mr) => {
+        const r = mr.ratings.find((x) => x.playerId === player.id);
+        if (!r) return [];
+        const referee = referees.find((ref) => ref.id === mr.refereeId);
+        // maç bilgisini bul
+        let matchInfo = null;
+        tournaments.forEach((t) => {
+            const rounds = [
+                ...(t.bracket.quarterFinals || []),
+                ...(t.bracket.semiFinals || []),
+                ...(t.bracket.final ? [t.bracket.final] : []),
+            ];
+            const m = rounds.find((x) => x.id === mr.matchId);
+            if (m) matchInfo = { ...m, tournamentName: t.name };
+        });
+        const roundLabel = mr.matchId.startsWith('qf') ? 'Çeyrek Final'
+            : mr.matchId.startsWith('sf') ? 'Yarı Final'
+            : 'Final';
+        return [{ ...r, referee, matchInfo, roundLabel, date: mr.date, tournamentName: matchInfo?.tournamentName }];
+    });
+    const avgRefereeRating = playerRatingEntries.length > 0
+        ? (playerRatingEntries.reduce((s, x) => s + x.rating, 0) / playerRatingEntries.length).toFixed(1)
+        : null;
+    const ratingColor = (v) => v >= 8 ? '#00E676' : v >= 6 ? '#FFD600' : '#FF5252';
 
     return (
         <Box sx={{ minHeight: '100vh', pt: 4, pb: 8 }}>
@@ -219,7 +250,7 @@ export default function PlayerProfile() {
                         </Card>
 
                         {/* Discipline Card */}
-                        <Card sx={{ p: 3 }}>
+                        <Card sx={{ p: 3, mb: 3 }}>
                             <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>Disiplin</Typography>
                             <Grid container spacing={3}>
                                 <Grid size={{ xs: 6 }} sx={{ textAlign: 'center' }}>
@@ -245,6 +276,83 @@ export default function PlayerProfile() {
                                     <Typography variant="body2" color="text.secondary">Kırmızı Kart</Typography>
                                 </Grid>
                             </Grid>
+                        </Card>
+
+                        {/* Hakem Değerlendirmeleri */}
+                        <Card sx={{
+                            p: 3,
+                            border: '1px solid rgba(255,214,0,0.15)',
+                            background: 'rgba(255,214,0,0.02)',
+                        }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                <GavelIcon sx={{ color: '#FFD600', fontSize: 20 }} />
+                                <Typography variant="h6" fontWeight={700}>Hakem Değerlendirmeleri</Typography>
+                                {avgRefereeRating && (
+                                    <Chip
+                                        label={`Ort. ${avgRefereeRating}`}
+                                        size="small"
+                                        sx={{ ml: 'auto', bgcolor: 'rgba(255,214,0,0.15)', color: '#FFD600', fontWeight: 800 }}
+                                    />
+                                )}
+                            </Box>
+                            {playerRatingEntries.length === 0 ? (
+                                <Box sx={{ py: 3, textAlign: 'center' }}>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Henüz hakem değerlendirmesi yok.
+                                    </Typography>
+                                </Box>
+                            ) : (
+                                <TableContainer>
+                                    <Table size="small">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ color: 'text.secondary', fontWeight: 700, fontSize: '0.75rem' }}>Maç</TableCell>
+                                                <TableCell sx={{ color: 'text.secondary', fontWeight: 700, fontSize: '0.75rem' }}>Hakem</TableCell>
+                                                <TableCell sx={{ color: 'text.secondary', fontWeight: 700, fontSize: '0.75rem' }} align="center">Puan</TableCell>
+                                                <TableCell sx={{ color: 'text.secondary', fontWeight: 700, fontSize: '0.75rem' }}>Yorum</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {playerRatingEntries.map((entry, i) => (
+                                                <TableRow key={i} sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.02)' } }}>
+                                                    <TableCell>
+                                                        <Typography variant="caption" fontWeight={700} display="block">
+                                                            {entry.roundLabel}
+                                                        </Typography>
+                                                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>
+                                                            {entry.tournamentName}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                            <Avatar src={entry.referee?.avatar} sx={{ width: 24, height: 24 }} />
+                                                            <Typography variant="caption" fontWeight={600}>
+                                                                {entry.referee?.name || 'Hakem'}
+                                                            </Typography>
+                                                        </Box>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Chip
+                                                            label={entry.rating}
+                                                            size="small"
+                                                            sx={{
+                                                                fontWeight: 900, minWidth: 36,
+                                                                bgcolor: `${ratingColor(entry.rating)}22`,
+                                                                color: ratingColor(entry.rating),
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            {entry.comment || '—'}
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            )}
                         </Card>
                     </Grid>
                 </Grid>
